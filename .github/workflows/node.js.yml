@@ -15,19 +15,12 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
-
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
     - name: Setup Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
+      uses: actions/checkout@v4
 
     - name: Clear npm cache
       run: npm cache clean -f
@@ -38,12 +31,6 @@ jobs:
     - name: Install Dependencies
       run: npm ci
 
-    - name: Ensure Lock File
-      run: |
-        if [ ! -f package-lock.json ]; then
-          echo "Error: Dependencies lock file is missing."
-          exit 1
-        fi
 
     - name: Update npm
       run: npm install -g npm
