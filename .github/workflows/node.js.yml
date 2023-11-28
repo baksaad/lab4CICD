@@ -17,15 +17,30 @@ jobs:
     strategy:
       matrix:
         node-version: [14.x, 16.x, 18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Ensure Lock File
+      run: |
+        if [ ! -f package-lock.json ]; then
+          echo "Error: Dependencies lock file is missing."
+          exit 1
+        fi
+
+    - name: Build (if present)
+      run: npm run build --if-present
+
+    - name: Run Tests
+      run: npm test
+
