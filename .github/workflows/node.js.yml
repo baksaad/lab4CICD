@@ -35,16 +35,6 @@ jobs:
     - name: Update npm
       run: npm install -g npm
 
-    - name: Print npm debug log
-      run: cat /home/runner/.npm/_logs/2023-11-28T10_45_19_631Z-debug.log
-
-    - name: Migrate to express.json() (optional)
-      run: |
-        sed -i 's/const bodyParser = require("body-parser");/const express = require("express");\nconst app = express();\napp.use(express.json());/' path/to/your/file.js
-
-    - name: Build (if present)
-      run: npm run build --if-present
-
     - name: Run Tests
       run: npm test
 
